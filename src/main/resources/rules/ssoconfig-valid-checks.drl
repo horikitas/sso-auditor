@@ -1,0 +1,65 @@
+package rules
+
+import org.horikita.sso_auditor.model.SSOConfig;
+
+global org.horikita.sso_auditor.service.RuleLogger logger;
+
+rule "CHECK_PROTOCOL:"
+    when
+        $cfg : SSOConfig(protocol == null || protocol != "SAML" || protocol != "OIDC")
+    then
+        logger.log("CHECK_PROTOCOL");
+end
+
+rule "CHECK_ENCRYPTION_ALGO: Encryption algorithm must be set"
+when
+    $cfg: SSOConfig(encryptionAlgorithm != null)
+then
+    logger.log("CHECK_ENCRYPTION_ALGO: Encryption algorithm must be set");
+end
+
+rule "CHECK_ENCRYPTION_ALGO: Allow only approved encryption algorithms"
+when
+    $cfg: SSOConfig(
+        encryptionAlgorithm != null,
+        !(encryptionAlgorithm == "SHA-256" ||
+          encryptionAlgorithm == "SHA-384" ||
+          encryptionAlgorithm == "SHA-512")
+    )
+then
+    logger.log("CHECK_ENCRYPTION_ALGO: Allow only approved encryption algorithms - SHA-256, SHA-384, SHA-512");
+end
+
+rule "CHECK_SIGNING_ALGO: Signing algorithm must be set"
+when
+    $cfg: SSOConfig(signingAlgorithm != null)
+then
+    logger.log("CHECK_SIGNING_ALGO: Signing algorithm must be set");
+end
+
+
+rule "CHECK_SIGNING_ALGO: Allow only approved signing algorithms"
+when
+    $cfg: SSOConfig(
+        signingAlgorithm != null,
+        !(signingAlgorithm == "SHA-256" ||
+          signingAlgorithm == "SHA-384" ||
+          signingAlgorithm == "SHA-512")
+    )
+then
+    logger.log("CHECK_SIGNING_ALGO: Allow only approved signing algorithms");
+end
+
+rule "CHECK_ASSERTION_ENCRYPTION: Assertion encryption must be set"
+when
+    $cfg: SSOConfig(assertionEncryption == true)
+then
+    logger.log("CHECK_ASSERTION_ENCRYPTION: Assertion encryption must be set");
+end
+
+rule "CHECK_BYPASS_SSO_ALLOWED: Bypass SSO Must Not Be Allowed"
+when
+    $cfg: SSOConfig(bypassSSOAllowed == false)
+then
+    logger.log("CHECK_BYPASS_SSO_ALLOWED: Bypass SSO Must Not Be Allowed");
+end
