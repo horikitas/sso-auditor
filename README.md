@@ -1,11 +1,17 @@
-# Read Me First
-The following was discovered as part of building this project:
 
-* The original package name 'org.horikita.sso-auditor' is invalid and this project uses 'org.horikita.rules_engine' instead.
-
-# Getting Started
+# Introduction  (WIP)
 This project is a Spring Boot application that uses Drools to validate SSO configurations.
 The application exposes a REST API to upload SSO configurations and get feedback on the validation results.
+
+**TODO**
+1. SAML Parser
+2. Validate OIDC Configurations
+
+
+**Why Did I Start Writing This**
+Kind of Fun Story - I was tired of answering same set of questions every year to Audit team.
+So, I thought of automating the process.
+This doesn't cover all areas of Audit. I randomly picked SSO as a starting point.
 
 ## Security Policy Evaluator – Rule-Driven SSO Config Validator
 **Problem**

@@ -1,0 +1,74 @@
+openapi: 3.0.0
+info:
+  title: SSO Auditor API
+  description: API documentation for the SSO Auditor project.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Local server
+paths:
+  /sso/audit:
+    post:
+      summary: Perform an audit on SSO configuration
+      requestBody:
+        description: SSO configuration to be audited
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SSOAuditRequest'
+      responses:
+        '200':
+          description: Audit result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditResult'
+components:
+  schemas:
+    SSOAuditRequest:
+      type: object
+      properties:
+        applicationId:
+          type: string
+        ssoAuditConfig:
+          $ref: '#/components/schemas/SSOAuditConfigDetails'
+      required:
+        - applicationId
+        - ssoAuditConfig
+
+    SSOAuditConfigDetails:
+      type: object
+      properties:
+        protocol:
+          type: string
+        encryptionAlgorithm:
+          type: string
+        signingAlgorithm:
+          type: string
+        assertionEncryptionEnabled:
+          type: boolean
+        bypassSSOAllowed:
+          type: boolean
+      required:
+        - protocol
+        - encryptionAlgorithm
+        - signingAlgorithm
+
+    AuditResult:
+      type: object
+      properties:
+        applicationId:
+          type: string
+        riskScore:
+          type: number
+        auditMessages:
+          type: array
+          items:
+            type: string
+        auditDate:
+          type: string
+          format: date-time
+      required:
+        - applicationId
+        - auditDate

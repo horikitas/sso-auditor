@@ -8,136 +8,52 @@
 		<version>3.4.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+
 	<groupId>org.horikita</groupId>
 	<artifactId>sso-auditor</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>${revision}</version>
+	<packaging>pom</packaging>
+
 	<name>sso-auditor</name>
-	<description>Demo project for Spring Boot</description>
+	<description>SSO Auditor Project just for fun since I'm tired of Audits!!</description>
+
+	<modules>
+		<module>sso-auditor-api</module>
+		<module>sso-auditor-app</module>
+	</modules>
 
 	<properties>
-		<java.version>11</java.version>
+		<revision>0.0.1</revision>
+		<java.version>17</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.release>11</maven.compiler.release>
+
+		<maven.compiler.release>17</maven.compiler.release>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+
 		<drools.version>8.44.0.Final</drools.version>
+		<lombok.version>1.18.30</lombok.version>
+
+		<spring-boot.version>3.4.3</spring-boot.version>
 	</properties>
+
 
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>org.drools</groupId>
-				<artifactId>drools-bom</artifactId>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring-boot.version}</version>
 				<type>pom</type>
-				<version>${drools.version}</version>
 				<scope>import</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
 	<dependencies>
-		<!-- Drools Core (Rules Engine) -->
-		<dependency>
-			<groupId>org.kie</groupId>
-			<artifactId>kie-api</artifactId>
-			<version>8.44.0.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>org.kie</groupId>
-			<artifactId>kie-dmn-api</artifactId>
-			<version>8.44.0.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>org.drools</groupId>
-			<artifactId>drools-core</artifactId>
-			<version>8.44.0.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>org.drools</groupId>
-			<artifactId>drools-compiler</artifactId>
-			<version>8.44.0.Final</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.drools/drools-xml-support -->
-		<dependency>
-			<groupId>org.drools</groupId>
-			<artifactId>drools-xml-support</artifactId>
-			<version>8.44.0.Final</version>
-			<scope>test</scope>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.drools/drools-mvel -->
-		<dependency>
-			<groupId>org.drools</groupId>
-			<artifactId>drools-mvel</artifactId>
-			<version>8.44.0.Final</version>
-		</dependency>
-
-		<!-- Spring dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
-
-
-		<!-- Utilities -->
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.18.30</version> <!-- Update to the latest version -->
-		</dependency>
-
-		<!-- Test Dependencies -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.projectreactor</groupId>
-			<artifactId>reactor-test</artifactId>
-			<scope>test</scope>
+			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 	</dependencies>
-
-	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>**/*.xml</include>
-					<include>**/*.drl</include>
-				</includes>
-			</resource>
-		</resources>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<annotationProcessorPaths>
-						<path>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</path>
-					</annotationProcessorPaths>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<!--<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>-->
-			</plugin>
-			 <plugin>
-				<groupId>org.kie</groupId>
-				<artifactId>kie-maven-plugin</artifactId>
-				<version>${drools.version}</version>
-				<extensions>true</extensions>
-			</plugin>
-		</plugins>
-	</build>
-
 </project>

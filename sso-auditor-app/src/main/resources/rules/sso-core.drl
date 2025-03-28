@@ -1,0 +1,58 @@
+package rules
+
+import org.horikita.sso_auditor.model.sso.SSOConfig;
+
+global org.horikita.sso_auditor.engine.RuleLogger logger;
+global org.horikita.sso_auditor.model.sso.RiskScore result;
+
+
+rule "CHECK_PROTOCOL:"
+    when
+        $cfg : SSOConfig(protocol == null || !(protocol == "SAML" || protocol == "OIDC"))
+    then
+        logger.log("CHECK_PROTOCOL: Protocol must be set to SAML or OIDC");
+        result.addRiskScore(10.0);
+        result.addMessage("Protocol must be set to SAML or OIDC");
+        drools.halt();
+end
+
+
+rule "CHECK_ENCRYPTION_ALGO: Allow only approved encryption algorithms"
+when
+    $cfg: SSOConfig(encryptionAlgorithm == null ||
+     !(encryptionAlgorithm == "SHA-256" || encryptionAlgorithm == "SHA-384" || encryptionAlgorithm == "SHA-512"))
+then
+    logger.log("CHECK_ENCRYPTION_ALGO: Allow only approved encryption algorithms - SHA-256, SHA-384, SHA-512");
+    result.addRiskScore(3.0);
+    result.addMessage("Allow only approved encryption algorithms - SHA-256, SHA-384, SHA-512");
+end
+
+
+rule "CHECK_SIGNING_ALGO: Allow only approved signing algorithms"
+when
+    $cfg: SSOConfig(
+        signingAlgorithm == null ||
+        !(signingAlgorithm == "SHA-256" || signingAlgorithm == "SHA-384" || signingAlgorithm == "SHA-512"))
+then
+    logger.log("CHECK_SIGNING_ALGO: Allow only approved signing algorithms");
+    result.addRiskScore(5.0);
+    result.addMessage("Allow only approved signing algorithms - SHA-256, SHA-384, SHA-512");
+end
+
+rule "CHECK_ASSERTION_ENCRYPTION: Assertion encryption must be set"
+when
+    $cfg: SSOConfig(assertionEncryptionEnabled == null || assertionEncryptionEnabled == false)
+then
+    logger.log("CHECK_ASSERTION_ENCRYPTION: Assertion encryption must be set");
+    result.addRiskScore(1.0);
+    result.addMessage("Assertion encryption must be set");
+end
+
+rule "CHECK_BYPASS_SSO_ALLOWED: Bypass SSO Must Not Be Allowed"
+when
+    $cfg: SSOConfig(bypassSSOAllowed == true)
+then
+    logger.log("CHECK_BYPASS_SSO_ALLOWED: Bypass SSO Must Not Be Allowed");
+    result.addRiskScore(5.5);
+    result.addMessage("Bypass SSO Must Not Be Allowed");
+end
